@@ -295,3 +295,148 @@ function resetForm() {
 // 스프레드시트 열기 (시뮬레이션)
 function openSpreadsheet(spreadsheetId) {
   if (spreadsheetId) {
+    alert(`스프레드시트를 여는 중입니다 (ID: ${spreadsheetId})`);
+    // 실제 환경에서는: window.open(`https://docs.google.com/spreadsheets/d/${spreadsheetId}/edit`, '_blank');
+  } else {
+    setStatusMessage('스프레드시트 ID를 찾을 수 없습니다.');
+  }
+}
+// 기록 테이블 업데이트
+function updateRecordsTable() {
+  const recordsContainer = document.getElementById('records-container');
+  const recordsList = document.getElementById('records-list');
+  
+  // 저장된 기록이 있으면 컨테이너 표시
+  if (records.length > 0) {
+    recordsContainer.classList.remove('hidden');
+    
+    // 테이블 내용 초기화
+    recordsList.innerHTML = '';
+    
+    // 각 기록에 대한 행 추가
+    records.forEach(record => {
+      const row = document.createElement('tr');
+      row.className = 'border-t border-gray-200 hover:bg-gray-50';
+      
+      // 수업일
+      const classDateCell = document.createElement('td');
+      classDateCell.className = 'py-2 px-4 text-gray-800';
+      classDateCell.textContent = record.classDate ? new Date(record.classDate).toLocaleDateString() : '-';
+      row.appendChild(classDateCell);
+      
+      // 반
+      const classCell = document.createElement('td');
+      classCell.className = 'py-2 px-4 text-gray-800';
+      classCell.textContent = record.class;
+      row.appendChild(classCell);
+      
+      // 기록일
+      const dateCell = document.createElement('td');
+      dateCell.className = 'py-2 px-4 text-gray-800';
+      dateCell.textContent = record.date;
+      row.appendChild(dateCell);
+      
+      // 페이지
+      const pageCell = document.createElement('td');
+      pageCell.className = 'py-2 px-4 text-gray-800';
+      pageCell.textContent = record.page;
+      row.appendChild(pageCell);
+      
+      // 상세보기 버튼
+      const actionCell = document.createElement('td');
+      actionCell.className = 'py-2 px-4';
+      
+      const viewButton = document.createElement('button');
+      viewButton.className = 'text-indigo-600 hover:text-indigo-800 font-medium';
+      viewButton.textContent = '보기';
+      viewButton.addEventListener('click', () => openSpreadsheet(record.spreadsheetId));
+      
+      actionCell.appendChild(viewButton);
+      row.appendChild(actionCell);
+      
+      // 행을 테이블에 추가
+      recordsList.appendChild(row);
+    });
+  } else {
+    // 기록이 없으면 컨테이너 숨기기
+    recordsContainer.classList.add('hidden');
+  }
+}
+
+// 로컬 스토리지에 기록 저장
+function saveRecordsToStorage() {
+  localStorage.setItem('classRecords', JSON.stringify(records));
+}
+
+// 로컬 스토리지에서 기록 불러오기
+function loadRecordsFromStorage() {
+  const storedRecords = localStorage.getItem('classRecords');
+  if (storedRecords) {
+    records = JSON.parse(storedRecords);
+  }
+}
+
+// 상태 메시지 설정
+function setStatusMessage(message) {
+  const statusMessage = document.getElementById('status-message');
+  statusMessage.textContent = message;
+  
+  // 메시지가 있으면 표시, 없으면 숨김
+  if (message) {
+    statusMessage.classList.remove('hidden');
+  } else {
+    statusMessage.classList.add('hidden');
+  }
+}
+
+// 로딩 표시
+function showLoading(message) {
+  const loadingOverlay = document.getElementById('loading-overlay');
+  const loadingMessage = document.getElementById('loading-message');
+  
+  loadingMessage.textContent = message || '로딩 중...';
+  loadingOverlay.classList.remove('hidden');
+}
+
+// 로딩 숨김
+function hideLoading() {
+  const loadingOverlay = document.getElementById('loading-overlay');
+  loadingOverlay.classList.add('hidden');
+}
+
+// 로딩 메시지 업데이트
+function updateLoadingMessage(message) {
+  const loadingMessage = document.getElementById('loading-message');
+  loadingMessage.textContent = message;
+}
+
+// 지연 함수 (async/await와 함께 사용)
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// 날짜 형식 변환 (YYYY-MM-DD → 표시용 문자열)
+function formatDate(dateString) {
+  if (!dateString) return '-';
+  
+  const date = new Date(dateString);
+  return date.toLocaleDateString();
+}
+
+// 현재 날짜를 YYYY-MM-DD 형식의 문자열로 반환
+function getTodayString() {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  
+  return `${year}-${month}-${day}`;
+}
+
+// 파일명 생성 함수
+function generateFilename(selectedClass) {
+  const today = new Date();
+  const dateStr = `${today.getFullYear()}${(today.getMonth()+1).toString().padStart(2, '0')}${today.getDate().toString().padStart(2, '0')}`;
+  
+  return `수업기록_${selectedClass}_${dateStr}`;
+}
