@@ -1,1 +1,126 @@
 
+/* 추가적인 커스텀 스타일 */
+body {
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif;
+  line-height: 1.5;
+  color: #333;
+}
+
+/* 애니메이션 */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+/* 입력 폼 요소 포커스 시 효과 강화 */
+input:focus, 
+select:focus, 
+textarea:focus {
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+  border-color: #6366f1;
+}
+
+/* 저장 성공 컨테이너 애니메이션 */
+#success-container {
+  animation: slideUp 0.4s ease-out;
+}
+
+/* 로딩 스피너 애니메이션 */
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 모바일 최적화 */
+@media (max-width: 640px) {
+  .max-w-4xl {
+    padding: 1rem;
+  }
+  
+  #btn-save, 
+  #btn-reset, 
+  #btn-new-record, 
+  #btn-open-spreadsheet {
+    width: 100%;
+    margin-top: 0.5rem;
+  }
+  
+  .flex.justify-end.space-x-4 {
+    flex-direction: column;
+  }
+  
+  .flex.justify-end.space-x-4 button {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  
+  .flex.space-x-4 {
+    flex-direction: column;
+  }
+  
+  .flex.space-x-4 button {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* 테이블 반응형 */
+@media (max-width: 768px) {
+  table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+}
+
+/* 테이블 행 호버 효과 */
+tbody tr {
+  transition: background-color 0.2s;
+}
+
+tbody tr:hover {
+  background-color: #f9fafb;
+}
+
+/* 버튼 트랜지션 효과 */
+button {
+  transition: all 0.2s;
+}
+
+/* 비활성화된 버튼 스타일 */
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 버튼 활성화 표시 */
+button:not(:disabled):hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 로딩 오버레이 페이드 효과 */
+#loading-overlay {
+  transition: opacity 0.3s;
+}
+
+/* 입력 필드 플레이스홀더 스타일 */
+::placeholder {
+  color: #a0aec0;
+  opacity: 0.7;
+}
+
+/* 상태 메시지 강조 */
+#status-message {
+  transition: all 0.3s;
+}
